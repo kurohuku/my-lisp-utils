@@ -2,16 +2,22 @@
   (:use :cl)
   (:nicknames mf)
   (:export
+   ;; make string
    mkstr
+   ;; make symbols
    symb
    make-keyword
+   ;; make list
    mklist
    iota
    enum
    group
    flatten
+   ;; function utility
    compose
-   chain))
+   chain
+   ;; mapping
+   mapcar-1))
 
 (in-package :mf)
 
@@ -72,4 +78,11 @@
     
 
 
+;;; mapping
+(defun mapcar-1 (fn fst &rest lsts)
+  (apply
+   #'mapcar
+   #'(lambda (&rest args)
+       (apply fn fst args))
+   lsts))
 

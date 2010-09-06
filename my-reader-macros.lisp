@@ -1,4 +1,3 @@
-
 (defpackage my-reader-macros
   (:use :cl :mf)
   (:nicknames mrm)
@@ -33,6 +32,12 @@
 (defun disable-string-reader ()
   (set-macro-character #\" #'sb-impl::read-string))
 
+
+;;; lambdaの省略記法の定義
+;; example
+;; #{list 1 2} => (lambda () (list 1 2))
+;; #{list $2 3} => (lambda ($1 $2) (list $2 3))
+;; #{list $1 $r} => (lambda ($1 &rest $r) (list $1 $r))
 (defun dollar-symbol-p (sym)
   (and (symbolp sym) (char= #\$ (char (symbol-name sym) 0))))
 
@@ -55,7 +60,7 @@
       `(lambda ,(if rest-p
 		    `(,@args &rest ,rest-p)
 		    `(,@args))
-	 ,@body))))
+	 ,body))))
 
 (defun enable-short-lambda-reader ()
   (set-macro-character #\} (get-macro-character #\)))
